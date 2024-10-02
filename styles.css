@@ -1,0 +1,113 @@
+/* Set background image and styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('image/lib.jpg'); /* Ensure the correct image path */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #ffffff;
+}
+
+/* Styling for the header */
+header {
+    background: linear-gradient(135deg, rgba(108, 92, 231, 0.9), rgba(255, 107, 129, 0.9)); 
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid #ffffff;
+}
+
+/* Apply VIBGYOR gradient to main content area */
+main {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background: linear-gradient(to right, rgb(236, 55, 55), orange, rgb(207, 207, 53), rgb(147, 244, 147), rgb(118, 115, 227), rgb(190, 118, 241), rgb(223, 206, 223)); 
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(41, 20, 20, 0.2);
+    color: #0d0d0d;
+}
+
+/* Styling for sections */
+h2 {
+    color: #ffffff; 
+    font-size: 1.7em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effect for section headings */
+#search h2:hover,
+#book-list h2:hover,
+#add-book h2:hover {
+    color: grey;
+    cursor: pointer;
+}
+
+/* Form, input, and button styles */
+form, input, button {
+    margin: 10px 0;
+}
+
+input, button {
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    font-size: 1em;
+}
+
+/* Input fields */
+input {
+    background: rgba(255, 252, 252, 0.9);
+    color: #2d3436;
+    border: 2px solid #2270cf; 
+}
+
+/* Button styles */
+button {
+    background-color: #2968a7;
+    color: #2d3436;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #b25ecb;
+    transform: scale(1.05);
+}
+
+/* List of books */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    background: rgba(21, 17, 57, 0.1); 
+    border: 1px solid #332f4c;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+}
+
+li:nth-child(odd) {
+    background: rgba(255, 107, 206, 0.1);
+}
+
+.delete-btn {
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #ff1a1a;
+}

@@ -1,98 +1,62 @@
-const input = document.querySelector("input");
-const addButton = document.querySelector(".add-button");
-const todosHtml = document.querySelector(".todos");
-const emptyImage = document.querySelector(".empty-image");
-let todosJson = JSON.parse(localStorage.getItem("todos")) || [];
-const deleteAllButton = document.querySelector(".delete-all");
-const filters = document.querySelectorAll(".filter");
-let filter = '';
+const bookForm = document.getElementById('book-form');
+const booksList = document.getElementById('books');
+const searchInput = document.getElementById('searchInput');
 
-showTodos();
+// Load books from local storage
+let books = JSON.parse(localStorage.getItem('books')) || [];
 
-function getTodoHtml(todo, index) {
-  if (filter && filter != todo.status) {
-    return '';
-  }
-  let checked = todo.status == "completed" ? "checked" : "";
-  return /* html */ `
-    <li class="todo">
-      <label for="${index}">
-        <input id="${index}" onclick="updateStatus(this)" type="checkbox" ${checked}>
-        <span class="${checked}">${todo.name}</span>
-      </label>
-      <button class="delete-btn" data-index="${index}" onclick="remove(this)"><i class="fa fa-times"></i></button>
-    </li>
-  `; 
-}
+// Function to render books
+function renderBooks(filter = '') {
+    booksList.innerHTML = '';
+    const filteredBooks = books.filter(book => 
+        book.title.toLowerCase().includes(filter.toLowerCase()) || 
+        book.author.toLowerCase().includes(filter.toLowerCase())
+    );
 
-function showTodos() {
-  if (todosJson.length == 0) {
-    todosHtml.innerHTML = '';
-    emptyImage.style.display = 'block';
-  } else {
-    todosHtml.innerHTML = todosJson.map(getTodoHtml).join('');
-    emptyImage.style.display = 'none';
-  }
-}
+    filteredBooks.forEach((book, index) => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `${book.title} by ${book.author} 
+                              <button class="delete-btn" data-index="${index}">Delete</button>`;
+        booksList.appendChild(listItem);
+    });
 
-function addTodo(todo)  {
-  input.value = "";
-  todosJson.unshift({ name: todo, status: "pending" });
-  localStorage.setItem("todos", JSON.stringify(todosJson));
-  showTodos();
-}
-
-input.addEventListener("keyup", e => {
-  let todo = input.value.trim();
-  if (!todo || e.key != "Enter") {
-    return;
-  }
-  addTodo(todo);
-});
-
-addButton.addEventListener("click", () => {
-  let todo = input.value.trim();
-  if (!todo) {
-    return;
-  }
-  addTodo(todo);
-});
-
-function updateStatus(todo) {
-  let todoName = todo.parentElement.lastElementChild;
-  if (todo.checked) {
-    todoName.classList.add("checked");
-    todosJson[todo.id].status = "completed";
-  } else {
-    todoName.classList.remove("checked");
-    todosJson[todo.id].status = "pending";
-  }
-  localStorage.setItem("todos", JSON.stringify(todosJson));
-}
-
-function remove(todo) {
-  const index = todo.dataset.index;
-  todosJson.splice(index, 1);
-  showTodos();
-  localStorage.setItem("todos", JSON.stringify(todosJson));
-}
-
-filters.forEach(function (el) {
-  el.addEventListener("click", (e) => {
-    if (el.classList.contains('active')) {
-      el.classList.remove('active');
-      filter = '';
-    } else {
-      filters.forEach(tag => tag.classList.remove('active'));
-      el.classList.add('active');
-      filter = e.target.dataset.filter;
+    if (filteredBooks.length === 0) {
+        const noBooksMessage = document.createElement('li');
+        noBooksMessage.textContent = 'No books found';
+        booksList.appendChild(noBooksMessage);
     }
-    showTodos();
-  });
+
+    // Add delete functionality to buttons
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', deleteBook);
+    });
+}
+
+// Add new book
+bookForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const title = document.getElementById('title').value;
+    const author = document.getElementById('author').value;
+
+    const newBook = { title, author };
+    books.push(newBook);
+    localStorage.setItem('books', JSON.stringify(books));
+    renderBooks();
+    bookForm.reset();
 });
 
-deleteAllButton.addEventListener("click", () => {
-  todosJson = [];
-  localStorage.setItem("todos", JSON.stringify(todosJson));
-  showTodos();
+// Delete a book
+function deleteBook(event) {
+    const index = event.target.getAttribute('data-index');
+    books.splice(index, 1); // Remove the book from the array
+    localStorage.setItem('books', JSON.stringify(books));
+    renderBooks();
+}
+
+// Search functionality
+searchInput.addEventListener('input', function() {
+    renderBooks(searchInput.value);
 });
+
+// Initial render
+renderBooks();
